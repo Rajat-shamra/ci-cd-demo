@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// Serve static files from "public" folder
+// Serve static files (public folder)
 app.use(express.static('public'));
 
 // ===== HOME PAGE =====
@@ -104,7 +104,7 @@ app.get('/', (req, res) => {
           <h2>DevOps Engineer | Cloud | Automation</h2>
           <div class="buttons">
             <a href="/about" class="btn">About Me</a>
-            <a href="https://www.linkedin.com/in/rajat-sharma-devops/" target="_blank" class="btn">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/rajat55" target="_blank" class="btn">LinkedIn</a>
             <a href="/projects" class="btn">My Projects</a>
           </div>
           <div class="moving-text">⚙️ AUTOMATION IS THE FUTURE ⚙️</div>
@@ -115,12 +115,12 @@ app.get('/', (req, res) => {
   `);
 });
 
-// ===== ABOUT PAGE =====
+// ===== FIXED: ABOUT PAGE =====
 app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, 'about.html'));
+  res.sendFile(path.join(__dirname, 'public', 'about.html'));
 });
 
-// ===== PROJECTS PAGE (future ready) =====
+// ===== PROJECTS PAGE =====
 app.get('/projects', (req, res) => {
   res.send(`
     <html>
