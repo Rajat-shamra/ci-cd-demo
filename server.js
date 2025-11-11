@@ -1,21 +1,16 @@
 /**
- * Rajat Sharma | DevOps Engineer Portfolio 2025
- * Ultimate Cinematic Edition with AI Readiness, Metrics, Logs & Auto Health
+ * Rajat Sharma | DevOps Engineer Portfolio
+ * Cinematic Edition - Everything Integrated
  */
 
 const express = require("express");
 const path = require("path");
 const os = require("os");
 const { execSync } = require("child_process");
-const fetch = require("node-fetch");
 const app = express();
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
-
-// ---------------- GLOBAL VARIABLES ----------------
-const BOT_NAME = "Rajat Sharma DevOps Assistant";
-const SITE_COLOR = "#00ffff";
 
 // ---------------- HOME PAGE ----------------
 app.get("/", (req, res) => {
@@ -23,8 +18,8 @@ app.get("/", (req, res) => {
   <html lang="en">
     <head>
       <title>Rajat Sharma | DevOps Engineer</title>
-      <meta name="description" content="Rajat Sharma - DevOps Engineer specializing in AWS, Docker, Kubernetes, CI/CD & Cloud Automation.">
-      <meta name="keywords" content="DevOps, Jenkins, Docker, Kubernetes, AWS, CI/CD, Rajat Sharma, Linux, Terraform, Monitoring">
+      <meta name="description" content="Rajat Sharma - DevOps Engineer specializing in AWS, Docker, Kubernetes, and CI/CD automation.">
+      <meta name="keywords" content="DevOps, Jenkins, Docker, Kubernetes, AWS, CI/CD, Rajat Sharma, Linux, Automation, Monitoring">
       <meta name="author" content="Rajat Sharma">
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <style>
@@ -32,7 +27,8 @@ app.get("/", (req, res) => {
         body {
           font-family: 'Poppins', sans-serif;
           background: radial-gradient(circle at 20% 20%, #001f3f, #000814, #020024);
-          color: white; overflow-x: hidden;
+          color: white;
+          overflow-x: hidden;
         }
         canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 
@@ -42,14 +38,14 @@ app.get("/", (req, res) => {
           backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 100;
         }
 
-        nav .brand { font-size: 1.8rem; font-weight: 800; color: ${SITE_COLOR}; }
+        nav .brand { font-size: 1.8rem; font-weight: 800; color: #00ffff; }
         nav a { color: #aee7ff; margin-left: 25px; text-decoration: none; font-weight: 600; transition: 0.3s; }
-        nav a:hover { color: ${SITE_COLOR}; text-shadow: 0 0 10px ${SITE_COLOR}; }
+        nav a:hover { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
 
         header { text-align: center; padding: 130px 40px 80px; }
         h1 {
           font-size: 5rem; font-weight: 900;
-          background: linear-gradient(to right, ${SITE_COLOR}, #0077ff);
+          background: linear-gradient(to right, #00ffff, #0077ff);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
           text-shadow: 0 0 40px rgba(0,255,255,0.3); animation: glowText 3s infinite alternate;
         }
@@ -62,7 +58,7 @@ app.get("/", (req, res) => {
         .buttons { margin-top: 40px; display: flex; justify-content: center; gap: 25px; }
         .btn {
           padding: 15px 40px; border: none; border-radius: 30px;
-          background: linear-gradient(90deg, ${SITE_COLOR}, #0077ff);
+          background: linear-gradient(90deg, #00ffff, #0077ff);
           color: white; text-decoration: none; box-shadow: 0 0 20px rgba(0,255,255,0.3);
           transition: all 0.3s ease;
         }
@@ -88,14 +84,15 @@ app.get("/", (req, res) => {
         }
 
         @keyframes glowText { 
-          0% { text-shadow: 0 0 20px ${SITE_COLOR}, 0 0 40px #0077ff; } 
-          100% { text-shadow: 0 0 60px ${SITE_COLOR}, 0 0 120px #00aaff; } 
+          0% { text-shadow: 0 0 20px #00ffff, 0 0 40px #0077ff; } 
+          100% { text-shadow: 0 0 60px #00ffff, 0 0 120px #00aaff; } 
         }
       </style>
     </head>
 
     <body>
       <canvas id="particles"></canvas>
+
       <nav>
         <div class="brand">Rajat Sharma</div>
         <div>
@@ -103,15 +100,16 @@ app.get("/", (req, res) => {
           <a href="/about">About</a>
           <a href="/metrics">Metrics</a>
           <a href="/logs">Logs</a>
-          <a href="/chat">AI Assistant</a>
+          <a href="https://www.linkedin.com/in/rajat55" target="_blank">LinkedIn</a>
         </div>
       </nav>
 
       <header>
         <h1>Rajat Sharma</h1>
-        <h2>DevOps Engineer | Cloud Automation | CI/CD | Kubernetes</h2>
+        <h2>DevOps Engineer | Automation | Cloud CI/CD</h2>
         <p>
-          Certified Kubernetes Administrator (CKA) and Docker Specialist with 4+ years of experience in Linux, AWS, Jenkins automation, and cloud optimization.
+          Certified Kubernetes Administrator (CKA) and Docker Specialist with 4+ years of experience in Linux, AWS, and Jenkins automation.
+          Building scalable, monitored, and auto-healing systems.
         </p>
         <div class="buttons">
           <a href="/about" class="btn">About Me</a>
@@ -131,7 +129,7 @@ app.get("/", (req, res) => {
       </section>
 
       <section>
-        <h2>📈 Tech Stack Overview</h2>
+        <h2>📊 My Tech Stack Overview</h2>
         <canvas id="skillsChart" style="max-width:600px;margin:auto;margin-top:30px;"></canvas>
         <script>
           const ctx = document.getElementById('skillsChart').getContext('2d');
@@ -150,6 +148,10 @@ app.get("/", (req, res) => {
 
       <footer>
         <p>© 2025 Rajat Sharma | Built with ❤️ DevOps, Docker & Jenkins</p>
+        <p>
+          <a href="https://www.linkedin.com/in/rajat55" target="_blank" style="color:#00ffff">LinkedIn</a> |
+          <a href="https://github.com/rajatsharma-dev" target="_blank" style="color:#00ffff">GitHub</a>
+        </p>
       </footer>
 
       <script>
@@ -165,8 +167,8 @@ app.get("/", (req, res) => {
           particles.forEach(p=>{
             ctx2.beginPath();
             ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);
-            ctx2.fillStyle = "${SITE_COLOR}";
-            ctx2.shadowColor = "${SITE_COLOR}";
+            ctx2.fillStyle = "#00ffff";
+            ctx2.shadowColor = "#00ffff";
             ctx2.shadowBlur = 10;
             ctx2.fill();
             p.x+=p.dx; p.y+=p.dy;
@@ -178,7 +180,8 @@ app.get("/", (req, res) => {
         animate();
       </script>
     </body>
-  </html>`);
+  </html>
+  `);
 });
 
 // ---------------- ABOUT PAGE ----------------
@@ -195,41 +198,22 @@ app.get("/metrics", (req, res) => {
 
   res.send(`
   <html>
-    <body style="background:#000;color:${SITE_COLOR};font-family:monospace;padding:40px;">
+    <body style="background:#000;color:#00ffff;font-family:monospace;padding:40px;">
       <h2>⚙️ Server Metrics</h2>
       <p>CPU Cores: ${os.cpus().length}</p>
       <p>Memory Used: ${usedMem.toFixed(2)} GB / ${totalMem.toFixed(2)} GB</p>
       <p>System Uptime: ${uptime} hours</p>
       <p>Platform: ${os.platform()}</p>
-      <a href="/" style="color:${SITE_COLOR};">← Back</a>
+      <a href="/" style="color:#00ffff;">← Back</a>
     </body>
   </html>`);
-});
-
-// ---------------- AI CHAT SIMULATION (Offline Safe) ----------------
-app.get("/chat", (req, res) => {
-  res.send(`
-  <html>
-    <body style="background:#000;color:${SITE_COLOR};font-family:Poppins;text-align:center;padding:50px;">
-      <h2>💬 ${BOT_NAME}</h2>
-      <p>AI Assistant is offline right now. (Set your OPENAI_API_KEY to enable it)</p>
-      <form method="POST" action="/chat">
-        <input name="query" style="padding:10px;width:300px;border-radius:8px;border:none;" placeholder="Ask something...">
-        <button style="padding:10px 20px;border:none;border-radius:8px;background:${SITE_COLOR};color:#000;font-weight:600;">Ask</button>
-      </form>
-    </body>
-  </html>`);
-});
-
-app.post("/chat", async (req, res) => {
-  res.send(`<p style="color:${SITE_COLOR};padding:40px;">AI offline - configure OPENAI_API_KEY in environment to enable assistant.</p>`);
 });
 
 // ---------------- LOGS PAGE ----------------
 app.get("/logs", (req, res) => {
   try {
     const logs = execSync("docker logs node-cicd --tail 20").toString();
-    res.send(`<meta http-equiv="refresh" content="5"><pre style="background:#000;color:${SITE_COLOR};padding:20px;">${logs}</pre>`);
+    res.send(`<meta http-equiv="refresh" content="5"><pre style="background:#000;color:#00ffff;padding:20px;">${logs}</pre>`);
   } catch {
     res.send("<p style='color:red;padding:20px;'>No container logs available.</p>");
   }
@@ -242,5 +226,5 @@ app.get("/health", (req, res) => {
 
 // ---------------- SERVER ----------------
 app.listen(3000, () => {
-  console.log("🚀 Rajat Sharma Cinematic Portfolio running with auto-metrics + AI ready + visual effects...");
+  console.log("🚀 Rajat Sharma Cinematic Portfolio running on port 3000...");
 });
