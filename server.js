@@ -5,133 +5,178 @@ app.get('/', (req, res) => {
   res.send(`
     <html>
       <head>
-        <title>Rajat Sharma | CI/CD Pipeline</title>
+        <title>Rajat Sharma | DevOps Automation</title>
         <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
           body {
             font-family: 'Poppins', sans-serif;
             height: 100vh;
-            background: linear-gradient(120deg, #001f3f, #003366, #0059b3, #0099ff);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: radial-gradient(circle at 20% 20%, #001f3f, #000814, #020024);
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             color: white;
-            overflow: hidden;
+            animation: gradientFlow 15s ease infinite;
           }
-          .card {
+
+          @keyframes gradientFlow {
+            0% { background: radial-gradient(circle at 20% 20%, #001f3f, #000814, #020024); }
+            50% { background: radial-gradient(circle at 80% 80%, #002f5f, #001122, #000); }
+            100% { background: radial-gradient(circle at 20% 20%, #001f3f, #000814, #020024); }
+          }
+
+          .hero {
             text-align: center;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            padding: 80px 130px;
-            border-radius: 30px;
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
+            padding: 120px 180px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 50px;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 100px rgba(0, 255, 255, 0.25);
             animation: fadeIn 2s ease-in-out;
           }
+
           h1 {
-            font-size: 4rem;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #00ffff, #00ccff, #007bff);
+            font-size: 7rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #00ffff, #00aaff, #0077ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: slideDown 1.5s ease;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 60px rgba(0, 255, 255, 0.3);
+            animation: glowPulse 3s ease-in-out infinite;
           }
+
           h2 {
-            font-size: 2rem;
-            margin-bottom: 25px;
-            color: #cce7ff;
+            font-size: 2.8rem;
+            color: #aee7ff;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+            animation: fadeInUp 3s ease;
           }
+
           p {
-            font-size: 1.3rem;
-            color: #e6f3ff;
-            max-width: 800px;
-            margin-bottom: 30px;
-          }
-          .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-          }
-          .btn {
-            font-size: 1.1rem;
-            padding: 12px 28px;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-          }
-          .btn-like {
-            background: linear-gradient(45deg, #ff6b6b, #ff4b4b);
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
-          }
-          .btn-like:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
-          }
-          .btn-commit {
-            background: linear-gradient(45deg, #00ffcc, #0099ff);
-            color: white;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
-          }
-          .btn-commit:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
-          }
-          .heart {
-            font-size: 2rem;
-            color: #ff4b4b;
-            animation: pulse 1.5s infinite;
+            font-size: 1.6rem;
+            color: #e6faff;
+            line-height: 1.8;
             margin-top: 30px;
+            max-width: 900px;
+            letter-spacing: 1px;
           }
-          footer {
-            position: absolute;
-            bottom: 15px;
-            color: #a8c0ff;
-            font-size: 1rem;
+
+          .divider {
+            width: 180px;
+            height: 4px;
+            background: linear-gradient(to right, #00ffff, #00aaff);
+            border-radius: 4px;
+            margin: 30px auto;
+            animation: pulse 2s infinite alternate;
           }
-          @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+
+          .moving-text {
+            margin-top: 50px;
+            font-size: 2.2rem;
+            color: #00eaff;
+            font-weight: 600;
+            letter-spacing: 2px;
+            animation: moveText 8s linear infinite;
+            text-shadow: 0 0 20px #00eaff;
           }
+
+          @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 40px #00eaff, 0 0 80px #0077ff; }
+            50% { text-shadow: 0 0 100px #00ffff, 0 0 160px #00ccff; }
+          }
+
           @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
+            from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
           }
-          @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
+
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
             to { opacity: 1; transform: translateY(0); }
           }
+
           @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; }
+            from { transform: scale(1); opacity: 0.7; }
+            to { transform: scale(1.3); opacity: 1; }
+          }
+
+          @keyframes moveText {
+            0% { transform: translateX(-100%); opacity: 0; }
+            25% { transform: translateX(0); opacity: 1; }
+            75% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+          }
+
+          footer {
+            position: absolute;
+            bottom: 25px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #a8c0ff;
+            letter-spacing: 1px;
+          }
+
+          /* Floating Orbs for depth effect */
+          .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.2);
+            animation: float 12s ease-in-out infinite;
+            filter: blur(2px);
+          }
+
+          .orb:nth-child(1) {
+            width: 80px; height: 80px; top: 15%; left: 10%;
+            animation-delay: 1s;
+          }
+          .orb:nth-child(2) {
+            width: 60px; height: 60px; top: 70%; left: 80%;
+            animation-delay: 3s;
+          }
+          .orb:nth-child(3) {
+            width: 100px; height: 100px; top: 40%; left: 60%;
+            animation-delay: 2s;
+          }
+
+          @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateY(-60px) rotate(180deg); opacity: 1; }
           }
         </style>
       </head>
+
       <body>
-        <div class="card">
-          <h1>Welcome Rajat!</h1>
-          <h2>Your CI/CD Pipeline Has Been Created Successfully 🚀</h2>
-          <p>This application is deployed using <b>Jenkins</b>, <b>Docker</b>, <b>GitHub</b>, and <b>AWS EC2</b>.<br>
-          Every push from GitHub automatically triggers a new build and deployment.</p>
-          <div class="buttons">
-            <button class="btn btn-like">❤️ Like</button>
-            <button class="btn btn-commit">💾 Commit</button>
-          </div>
-          <div class="heart">💖</div>
+        <div class="hero">
+          <h1>RAJAT SHARMA</h1>
+          <div class="divider"></div>
+          <h2>DevOps Engineer | AWS | Docker | Jenkins | Kubernetes</h2>
+          <p>Building the Future of Automation with Scalable CI/CD Pipelines.<br>
+             Every commit triggers a seamless automated workflow across the cloud.<br>
+             Designed with <b>Docker</b>, <b>Jenkins</b>, <b>GitHub</b>, and <b>AWS EC2</b>.</p>
+          <div class="moving-text">⚙️ AUTOMATION IS THE FUTURE ⚙️</div>
         </div>
-        <footer>© 2025 Rajat Sharma | DevOps CI/CD Demo</footer>
+
+        <footer>© 2025 Rajat Sharma | DevOps CI/CD Automation Dashboard</footer>
+
+        <!-- Floating background lights -->
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
       </body>
     </html>
   `);
 });
 
 app.listen(3000, () => {
-  console.log('🚀 Rajat CI/CD Dashboard running on port 3000...');
+  console.log('🚀 Rajat Sharma Premium CI/CD Dashboard running on port 3000...');
 });
