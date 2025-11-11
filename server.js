@@ -1,10 +1,11 @@
 /**
  * Rajat Sharma | DevOps Engineer Portfolio
- * Cinematic Edition – CI/CD + Docker + Jenkins + Particles + Auto Logs
+ * Cinematic Edition - Everything Integrated
  */
 
 const express = require("express");
 const path = require("path");
+const os = require("os");
 const { execSync } = require("child_process");
 const app = express();
 
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
       <meta name="description" content="Rajat Sharma - DevOps Engineer specializing in AWS, Docker, Kubernetes, and CI/CD automation.">
       <meta name="keywords" content="DevOps, Jenkins, Docker, Kubernetes, AWS, CI/CD, Rajat Sharma, Linux, Automation, Monitoring">
       <meta name="author" content="Rajat Sharma">
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <style>
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body {
@@ -28,172 +30,75 @@ app.get("/", (req, res) => {
           color: white;
           overflow-x: hidden;
         }
-        canvas {
-          position: fixed;
-          top: 0; left: 0;
-          width: 100%; height: 100%;
-          z-index: -1;
-        }
+        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
 
         nav {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 20px 60px;
-          background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(8px);
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          animation: fadeIn 1.5s ease-in-out;
+          display: flex; justify-content: space-between; align-items: center;
+          padding: 20px 60px; background: rgba(255,255,255,0.05);
+          backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 100;
         }
 
-        nav .brand {
-          font-size: 1.8rem;
-          font-weight: 800;
-          color: #00ffff;
-        }
+        nav .brand { font-size: 1.8rem; font-weight: 800; color: #00ffff; }
+        nav a { color: #aee7ff; margin-left: 25px; text-decoration: none; font-weight: 600; transition: 0.3s; }
+        nav a:hover { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
 
-        nav a {
-          color: #aee7ff;
-          margin-left: 25px;
-          text-decoration: none;
-          font-weight: 600;
-          transition: 0.3s;
-        }
-
-        nav a:hover {
-          color: #00ffff;
-          text-shadow: 0 0 10px #00ffff;
-        }
-
-        header {
-          text-align: center;
-          padding: 130px 40px 80px;
-          animation: fadeInUp 2s ease-in-out;
-        }
-
+        header { text-align: center; padding: 130px 40px 80px; }
         h1 {
-          font-size: 5rem;
-          font-weight: 900;
+          font-size: 5rem; font-weight: 900;
           background: linear-gradient(to right, #00ffff, #0077ff);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 40px rgba(0,255,255,0.3);
-          animation: glowText 3s infinite alternate;
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+          text-shadow: 0 0 40px rgba(0,255,255,0.3); animation: glowText 3s infinite alternate;
         }
-
-        h2 {
-          margin-top: 15px;
-          font-size: 2.2rem;
-          color: #cfeaff;
-          animation: fadeIn 3s ease;
-        }
-
+        h2 { margin-top: 15px; font-size: 2.2rem; color: #cfeaff; }
         p {
-          margin-top: 25px;
-          font-size: 1.3rem;
-          color: #d6faff;
-          max-width: 850px;
-          margin-left: auto;
-          margin-right: auto;
-          line-height: 1.8;
+          margin-top: 25px; font-size: 1.3rem; color: #d6faff;
+          max-width: 850px; margin-left: auto; margin-right: auto; line-height: 1.8;
         }
 
-        .buttons {
-          margin-top: 40px;
-          display: flex;
-          justify-content: center;
-          gap: 25px;
-        }
-
+        .buttons { margin-top: 40px; display: flex; justify-content: center; gap: 25px; }
         .btn {
-          padding: 15px 40px;
-          border: none;
-          border-radius: 30px;
+          padding: 15px 40px; border: none; border-radius: 30px;
           background: linear-gradient(90deg, #00ffff, #0077ff);
-          color: white;
-          text-decoration: none;
-          box-shadow: 0 0 20px rgba(0,255,255,0.3);
+          color: white; text-decoration: none; box-shadow: 0 0 20px rgba(0,255,255,0.3);
           transition: all 0.3s ease;
         }
+        .btn:hover { transform: scale(1.08); box-shadow: 0 0 40px rgba(0,255,255,0.6); }
 
-        .btn:hover {
-          transform: scale(1.08);
-          box-shadow: 0 0 40px rgba(0,255,255,0.6);
-        }
-
-        section {
-          padding: 70px 10%;
-          text-align: center;
-        }
-
+        section { padding: 70px 10%; text-align: center; }
         .projects {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 40px;
-          margin-top: 40px;
+          display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 40px; margin-top: 40px;
         }
 
         .card {
           background: rgba(255, 255, 255, 0.08);
           border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 20px;
-          padding: 30px;
+          border-radius: 20px; padding: 30px;
           box-shadow: 0 0 50px rgba(0,255,255,0.15);
-          backdrop-filter: blur(10px);
-          transition: all 0.3s ease;
+          backdrop-filter: blur(10px); transition: all 0.3s ease;
+        }
+        .card:hover { transform: scale(1.05); box-shadow: 0 0 60px rgba(0,255,255,0.4); }
+
+        footer { text-align: center; padding: 50px 20px; color: #a8c0ff;
+          background: rgba(255,255,255,0.05); border-top: 1px solid rgba(255,255,255,0.1); margin-top: 80px;
         }
 
-        .card:hover {
-          transform: scale(1.05);
-          box-shadow: 0 0 60px rgba(0,255,255,0.4);
-        }
-
-        .card h3 {
-          font-size: 1.6rem;
-          color: #00eaff;
-          margin-bottom: 10px;
-        }
-
-        .card p {
-          color: #d6faff;
-          font-size: 1.1rem;
-          line-height: 1.6;
-        }
-
-        footer {
-          text-align: center;
-          padding: 50px 20px;
-          color: #a8c0ff;
-          background: rgba(255,255,255,0.05);
-          border-top: 1px solid rgba(255,255,255,0.1);
-          margin-top: 80px;
-        }
-
-        @keyframes glowText {
-          0% { text-shadow: 0 0 20px #00ffff, 0 0 40px #0077ff; }
-          100% { text-shadow: 0 0 60px #00ffff, 0 0 120px #00aaff; }
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(50px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes glowText { 
+          0% { text-shadow: 0 0 20px #00ffff, 0 0 40px #0077ff; } 
+          100% { text-shadow: 0 0 60px #00ffff, 0 0 120px #00aaff; } 
         }
       </style>
     </head>
+
     <body>
       <canvas id="particles"></canvas>
+
       <nav>
         <div class="brand">Rajat Sharma</div>
         <div>
           <a href="/">Home</a>
           <a href="/about">About</a>
+          <a href="/metrics">Metrics</a>
           <a href="/logs">Logs</a>
           <a href="https://www.linkedin.com/in/rajat55" target="_blank">LinkedIn</a>
         </div>
@@ -203,11 +108,12 @@ app.get("/", (req, res) => {
         <h1>Rajat Sharma</h1>
         <h2>DevOps Engineer | Automation | Cloud CI/CD</h2>
         <p>
-          Certified Kubernetes Administrator (CKA) and Docker Specialist with 4+ years of experience in Linux, AWS, and Jenkins automation.  
-          I build scalable systems that connect automation, monitoring, and cloud integration seamlessly.
+          Certified Kubernetes Administrator (CKA) and Docker Specialist with 4+ years of experience in Linux, AWS, and Jenkins automation.
+          Building scalable, monitored, and auto-healing systems.
         </p>
         <div class="buttons">
           <a href="/about" class="btn">About Me</a>
+          <a href="/metrics" class="btn">Live Metrics</a>
           <a href="https://www.linkedin.com/in/rajat55" target="_blank" class="btn">LinkedIn</a>
         </div>
       </header>
@@ -223,13 +129,21 @@ app.get("/", (req, res) => {
       </section>
 
       <section>
-        <h2>⚙️ My Tech Stack</h2>
-        <div class="projects">
-          <div class="card"><h3>Cloud & DevOps</h3><p>AWS, GCP, Terraform, Ansible</p></div>
-          <div class="card"><h3>Containers</h3><p>Docker, Kubernetes, Helm</p></div>
-          <div class="card"><h3>CI/CD Tools</h3><p>Jenkins, GitHub Actions, ArgoCD</p></div>
-          <div class="card"><h3>Monitoring</h3><p>Prometheus, Grafana, ELK Stack</p></div>
-        </div>
+        <h2>📊 My Tech Stack Overview</h2>
+        <canvas id="skillsChart" style="max-width:600px;margin:auto;margin-top:30px;"></canvas>
+        <script>
+          const ctx = document.getElementById('skillsChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ['AWS', 'Kubernetes', 'Docker', 'Linux', 'Jenkins', 'Terraform'],
+              datasets: [{
+                data: [25, 20, 15, 20, 10, 10],
+                backgroundColor: ['#00ffff','#0077ff','#00aaff','#00eaff','#004fff','#0099cc']
+              }]
+            }
+          });
+        </script>
       </section>
 
       <footer>
@@ -242,25 +156,21 @@ app.get("/", (req, res) => {
 
       <script>
         const canvas = document.getElementById("particles");
-        const ctx = canvas.getContext("2d");
-        canvas.width = innerWidth;
-        canvas.height = innerHeight;
+        const ctx2 = canvas.getContext("2d");
+        canvas.width = innerWidth; canvas.height = innerHeight;
         const particles = Array.from({length: 60}, () => ({
-          x: Math.random()*canvas.width,
-          y: Math.random()*canvas.height,
-          r: Math.random()*2 + 1,
-          dx: (Math.random()-0.5)*0.5,
-          dy: (Math.random()-0.5)*0.5
+          x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+          r: Math.random()*2 + 1, dx: (Math.random()-0.5)*0.5, dy: (Math.random()-0.5)*0.5
         }));
         function animate(){
-          ctx.clearRect(0,0,canvas.width,canvas.height);
+          ctx2.clearRect(0,0,canvas.width,canvas.height);
           particles.forEach(p=>{
-            ctx.beginPath();
-            ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-            ctx.fillStyle = "#00ffff";
-            ctx.shadowColor = "#00ffff";
-            ctx.shadowBlur = 10;
-            ctx.fill();
+            ctx2.beginPath();
+            ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx2.fillStyle = "#00ffff";
+            ctx2.shadowColor = "#00ffff";
+            ctx2.shadowBlur = 10;
+            ctx2.fill();
             p.x+=p.dx; p.y+=p.dy;
             if(p.x<0||p.x>canvas.width) p.dx*=-1;
             if(p.y<0||p.y>canvas.height) p.dy*=-1;
@@ -279,7 +189,27 @@ app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
 });
 
-// ---------------- LOGS ----------------
+// ---------------- METRICS PAGE ----------------
+app.get("/metrics", (req, res) => {
+  const totalMem = os.totalmem() / (1024 ** 3);
+  const freeMem = os.freemem() / (1024 ** 3);
+  const usedMem = totalMem - freeMem;
+  const uptime = (os.uptime() / 3600).toFixed(2);
+
+  res.send(`
+  <html>
+    <body style="background:#000;color:#00ffff;font-family:monospace;padding:40px;">
+      <h2>⚙️ Server Metrics</h2>
+      <p>CPU Cores: ${os.cpus().length}</p>
+      <p>Memory Used: ${usedMem.toFixed(2)} GB / ${totalMem.toFixed(2)} GB</p>
+      <p>System Uptime: ${uptime} hours</p>
+      <p>Platform: ${os.platform()}</p>
+      <a href="/" style="color:#00ffff;">← Back</a>
+    </body>
+  </html>`);
+});
+
+// ---------------- LOGS PAGE ----------------
 app.get("/logs", (req, res) => {
   try {
     const logs = execSync("docker logs node-cicd --tail 20").toString();
@@ -289,12 +219,12 @@ app.get("/logs", (req, res) => {
   }
 });
 
-// ---------------- HEALTH ----------------
+// ---------------- HEALTH CHECK ----------------
 app.get("/health", (req, res) => {
   res.json({ status: "healthy", time: new Date().toISOString() });
 });
 
 // ---------------- SERVER ----------------
 app.listen(3000, () => {
-  console.log("🚀 Rajat Sharma Cinematic Portfolio running beautifully on port 3000...");
+  console.log("🚀 Rajat Sharma Cinematic Portfolio running on port 3000...");
 });
