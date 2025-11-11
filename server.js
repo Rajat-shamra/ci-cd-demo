@@ -14,62 +14,73 @@ app.get('/', (req, res) => {
           }
           body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: #fff;
+            background: linear-gradient(135deg, #001f3f, #0074D9, #00BFFF);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            color: white;
             overflow: hidden;
-          }
-          .glow-box {
             text-align: center;
-            padding: 60px 100px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
-            animation: pulse 4s infinite;
           }
           h1 {
-            font-size: 3.5rem;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            background: linear-gradient(to right, #00f5d4, #00bbf9, #4361ee);
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #00ffcc, #33ccff, #0066ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            animation: fadeIn 3s ease-in-out;
           }
           h2 {
-            font-size: 1.6rem;
-            color: #c8d6e5;
-            margin-bottom: 30px;
+            font-size: 2rem;
+            color: #cce7ff;
+            margin-bottom: 40px;
+            animation: slideUp 3s ease-in-out;
           }
           p {
-            font-size: 1.1rem;
-            color: #b2bec3;
+            font-size: 1.3rem;
+            color: #d8e6f3;
+            max-width: 800px;
+            line-height: 1.5;
+            animation: fadeIn 4s ease-in-out;
+          }
+          .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 60px 80px;
+            border-radius: 25px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            backdrop-filter: blur(6px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
           }
           footer {
             position: absolute;
-            bottom: 15px;
-            font-size: 0.9rem;
-            color: #b2bec3;
-            opacity: 0.8;
+            bottom: 20px;
+            font-size: 1rem;
+            color: #a8c0ff;
+            opacity: 0.9;
           }
-          @keyframes pulse {
-            0% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); }
-            50% { box-shadow: 0 0 45px rgba(0, 255, 255, 0.6); }
-            100% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); }
+          @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+          }
+          @keyframes slideUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
           }
         </style>
       </head>
       <body>
-        <div class="glow-box">
+        <div class="container">
           <h1>Welcome Rajat!</h1>
-          <h2>Your CI/CD Pipeline has been created successfully 🎯</h2>
-          <p>Continuous Integration & Deployment powered by Jenkins, Docker, GitHub, and AWS.</p>
-          <p style="margin-top: 15px;">Each commit automatically triggers a build & redeployment.</p>
+          <h2>Your CI/CD Pipeline Has Been Created Successfully 🚀</h2>
+          <p>
+            This application is automatically deployed using Jenkins, Docker, GitHub, and AWS.<br>
+            Every time you push code to GitHub, Jenkins builds, tests, and deploys the latest version automatically.
+          </p>
         </div>
-        <footer>© 2025 Rajat Sharma | DevOps Automation Demo</footer>
+        <footer>© 2025 Rajat Sharma | DevOps CI/CD Demo</footer>
       </body>
     </html>
   `);
