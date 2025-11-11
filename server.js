@@ -5,86 +5,96 @@ app.get('/', (req, res) => {
   res.send(`
     <html>
       <head>
-        <title>Project Infinity | Rajat Sharma DevOps CI/CD</title>
+        <title>Rajat Sharma | CI/CD Pipeline</title>
         <style>
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
           body {
             font-family: 'Poppins', sans-serif;
             height: 100vh;
-            background: linear-gradient(120deg, #020024, #090979, #00d4ff);
+            background: linear-gradient(120deg, #001f3f, #003366, #0059b3, #0099ff);
             background-size: 400% 400%;
-            animation: gradientShift 12s ease infinite;
+            animation: gradientShift 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             color: white;
             overflow: hidden;
           }
-
-          .main-container {
+          .card {
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            padding: 80px 120px;
-            border-radius: 35px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 80px 130px;
+            border-radius: 30px;
             box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             animation: fadeIn 2s ease-in-out;
           }
-
           h1 {
-            font-size: 4.5rem;
-            background: linear-gradient(to right, #00f5d4, #00bbf9, #4361ee);
+            font-size: 4rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #00ffff, #00ccff, #007bff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-            animation: slideDown 1.2s ease;
+            animation: slideDown 1.5s ease;
           }
-
           h2 {
             font-size: 2rem;
-            color: #bde0fe;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-            animation: fadeIn 2.2s ease-in-out;
+            margin-bottom: 25px;
+            color: #cce7ff;
           }
-
           p {
-            font-size: 1.2rem;
-            color: #e0f2ff;
-            line-height: 1.6;
+            font-size: 1.3rem;
+            color: #e6f3ff;
+            max-width: 800px;
             margin-bottom: 30px;
           }
-
-          .highlight {
-            color: #00ffff;
+          .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+          }
+          .btn {
+            font-size: 1.1rem;
+            padding: 12px 28px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-weight: 600;
           }
-
-          .info-card {
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 15px;
-            padding: 15px 25px;
-            display: inline-block;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-            color: #aeefff;
-            animation: glowPulse 3s infinite ease-in-out;
+          .btn-like {
+            background: linear-gradient(45deg, #ff6b6b, #ff4b4b);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
           }
-
+          .btn-like:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+          }
+          .btn-commit {
+            background: linear-gradient(45deg, #00ffcc, #0099ff);
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+          }
+          .btn-commit:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+          }
+          .heart {
+            font-size: 2rem;
+            color: #ff4b4b;
+            animation: pulse 1.5s infinite;
+            margin-top: 30px;
+          }
           footer {
             position: absolute;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-            color: #b0d8ff;
-            font-size: 0.9rem;
+            bottom: 15px;
+            color: #a8c0ff;
+            font-size: 1rem;
           }
-
           @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -98,53 +108,30 @@ app.get('/', (req, res) => {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
           }
-          @keyframes glowPulse {
-            0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.7); }
-            100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
-          }
-
-          .orb {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: rgba(0,255,255,0.3);
-            animation: float 10s infinite ease-in-out;
-          }
-          @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-            50% { transform: translateY(-60px) rotate(180deg); opacity: 1; }
+          @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
           }
         </style>
       </head>
-
       <body>
-        <div class="main-container">
-          <h1>🚀 Project Infinity</h1>
-          <h2>Welcome Rajat Sharma</h2>
-          <p>Your <span class="highlight">End-to-End DevOps Pipeline</span> has been successfully built and deployed.<br>
-          This is a fully automated <span class="highlight">CI/CD</span> system powered by Jenkins, Docker, GitHub, and AWS EC2.</p>
-
-          <div class="info-card">
-            🌐 Environment: AWS EC2 (Ubuntu 22.04) <br>
-            🔄 Last Build: 11-Nov-2025 | Build ID: #1 <br>
-            🧠 Managed by: Jenkins Automation Engine
+        <div class="card">
+          <h1>Welcome Rajat!</h1>
+          <h2>Your CI/CD Pipeline Has Been Created Successfully 🚀</h2>
+          <p>This application is deployed using <b>Jenkins</b>, <b>Docker</b>, <b>GitHub</b>, and <b>AWS EC2</b>.<br>
+          Every push from GitHub automatically triggers a new build and deployment.</p>
+          <div class="buttons">
+            <button class="btn btn-like">❤️ Like</button>
+            <button class="btn btn-commit">💾 Commit</button>
           </div>
+          <div class="heart">💖</div>
         </div>
-
-        <footer>© 2025 Rajat Sharma | Project Infinity – DevOps CI/CD Dashboard</footer>
-
-        <!-- floating glowing orbs -->
-        <div class="orb" style="top: 20%; left: 10%; animation-delay: 1s;"></div>
-        <div class="orb" style="top: 70%; left: 80%; animation-delay: 3s;"></div>
-        <div class="orb" style="top: 40%; left: 60%; animation-delay: 2s;"></div>
-        <div class="orb" style="top: 85%; left: 25%; animation-delay: 4s;"></div>
+        <footer>© 2025 Rajat Sharma | DevOps CI/CD Demo</footer>
       </body>
     </html>
   `);
 });
 
 app.listen(3000, () => {
-  console.log('🚀 Project Infinity running on port 3000...');
+  console.log('🚀 Rajat CI/CD Dashboard running on port 3000...');
 });
