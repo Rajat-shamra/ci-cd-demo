@@ -1,6 +1,11 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
+// Serve static files for about page
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Main Dashboard Page
 app.get('/', (req, res) => {
   res.send(`
     <html>
@@ -33,7 +38,7 @@ app.get('/', (req, res) => {
 
           .hero {
             text-align: center;
-            padding: 120px 180px;
+            padding: 100px 150px;
             background: rgba(255, 255, 255, 0.07);
             border-radius: 50px;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -90,6 +95,44 @@ app.get('/', (req, res) => {
             text-shadow: 0 0 20px #00eaff;
           }
 
+          .buttons {
+            margin-top: 60px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+          }
+
+          .btn {
+            font-size: 1.4rem;
+            padding: 18px 45px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+          }
+
+          .linkedin {
+            background: linear-gradient(45deg, #0077b5, #00aaff);
+            box-shadow: 0 0 25px rgba(0,150,255,0.6);
+          }
+          .linkedin:hover {transform: scale(1.1);}
+          .about {
+            background: linear-gradient(45deg, #00ffcc, #0099ff);
+            box-shadow: 0 0 25px rgba(0,255,255,0.6);
+          }
+          .about:hover {transform: scale(1.1);}
+
+          footer {
+            position: absolute;
+            bottom: 25px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #a8c0ff;
+            letter-spacing: 1px;
+          }
+
           @keyframes glowPulse {
             0%, 100% { text-shadow: 0 0 40px #00eaff, 0 0 80px #0077ff; }
             50% { text-shadow: 0 0 100px #00ffff, 0 0 160px #00ccff; }
@@ -117,16 +160,6 @@ app.get('/', (req, res) => {
             100% { transform: translateX(100%); opacity: 0; }
           }
 
-          footer {
-            position: absolute;
-            bottom: 25px;
-            text-align: center;
-            font-size: 1.1rem;
-            color: #a8c0ff;
-            letter-spacing: 1px;
-          }
-
-          /* Floating Orbs for depth effect */
           .orb {
             position: absolute;
             border-radius: 50%;
@@ -134,7 +167,6 @@ app.get('/', (req, res) => {
             animation: float 12s ease-in-out infinite;
             filter: blur(2px);
           }
-
           .orb:nth-child(1) {
             width: 80px; height: 80px; top: 15%; left: 10%;
             animation-delay: 1s;
@@ -163,18 +195,32 @@ app.get('/', (req, res) => {
           <p>Building the Future of Automation with Scalable CI/CD Pipelines.<br>
              Every commit triggers a seamless automated workflow across the cloud.<br>
              Designed with <b>Docker</b>, <b>Jenkins</b>, <b>GitHub</b>, and <b>AWS EC2</b>.</p>
+
+          <div class="buttons">
+            <button class="btn linkedin" onclick="window.open('https://www.linkedin.com/in/rajat-sharma-2213a0277','_blank')">
+              🔗 LinkedIn Profile
+            </button>
+            <button class="btn about" onclick="window.location.href='/about'">
+              📄 About Rajat Sharma
+            </button>
+          </div>
+
           <div class="moving-text">⚙️ AUTOMATION IS THE FUTURE ⚙️</div>
         </div>
 
         <footer>© 2025 Rajat Sharma | DevOps CI/CD Automation Dashboard</footer>
 
-        <!-- Floating background lights -->
         <div class="orb"></div>
         <div class="orb"></div>
         <div class="orb"></div>
       </body>
     </html>
   `);
+});
+
+// About page
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'about.html'));
 });
 
 app.listen(3000, () => {
