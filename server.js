@@ -1,5 +1,3 @@
-second code
-
 /**
  * Rajat Sharma | DevOps Engineer Portfolio
  * Cinematic Edition - Everything Integrated
