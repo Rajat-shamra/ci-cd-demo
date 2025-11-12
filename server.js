@@ -1,6 +1,7 @@
 /**
- * Rajat Sharma | DevOps Engineer Portfolio (Cinematic Neon Edition v2)
- * Futuristic Interactive Portfolio - Node.js + Express
+ * Rajat Sharma | DevOps Engineer Portfolio
+ * Cinematic Neon Dashboard Edition (Full)
+ * Integrated System Metrics | Cluster Info | CI/CD Status
  */
 
 const express = require("express");
@@ -20,9 +21,7 @@ app.get("/", (req, res) => {
     <title>Rajat Sharma | DevOps Engineer</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Rajat Sharma - DevOps Engineer specializing in AWS, Docker, Kubernetes, CI/CD automation.">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       body {
         font-family: 'Poppins', sans-serif;
@@ -55,7 +54,6 @@ app.get("/", (req, res) => {
         transition: 0.3s;
       }
       nav a:hover { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
-
       header {
         text-align: center;
         padding: 140px 40px 100px;
@@ -74,7 +72,6 @@ app.get("/", (req, res) => {
       }
       h2 { font-size: 2.2rem; color: #cfeaff; margin-top: 20px; }
       p { color: #d6faff; font-size: 1.2rem; line-height: 1.8; }
-
       .btn {
         display: inline-block;
         padding: 15px 40px;
@@ -85,7 +82,6 @@ app.get("/", (req, res) => {
         transition: all 0.3s;
       }
       .btn:hover { transform: scale(1.1); box-shadow: 0 0 40px rgba(0,255,255,0.8); }
-
       section { padding: 80px 10%; text-align: center; }
       footer {
         text-align: center;
@@ -94,7 +90,6 @@ app.get("/", (req, res) => {
         border-top: 1px solid rgba(255,255,255,0.1);
         background: rgba(255,255,255,0.03);
       }
-      @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
   </head>
   <body>
@@ -103,7 +98,7 @@ app.get("/", (req, res) => {
       <div>
         <a href="/">Home</a>
         <a href="/about">About</a>
-        <a href="/metrics">Metrics</a>
+        <a href="/dashboard">Dashboard</a>
         <a href="/logs">Logs</a>
         <a href="https://linkedin.com/in/rajat55" target="_blank">LinkedIn</a>
       </div>
@@ -115,7 +110,7 @@ app.get("/", (req, res) => {
       <p>Certified Kubernetes Administrator (CKA) and Docker Professional with 4+ years of hands-on experience in AWS, Jenkins, and Linux automation. Building resilient cloud infrastructure with zero downtime.</p>
       <div style="margin-top:40px;">
         <a href="/about" class="btn">About Me</a>
-        <a href="/metrics" class="btn">System Metrics</a>
+        <a href="/dashboard" class="btn">DevOps Dashboard</a>
         <a href="https://github.com/rajatsharma-dev" target="_blank" class="btn">GitHub</a>
       </div>
     </header>
@@ -134,39 +129,87 @@ app.get("/about", (req, res) => {
   <html><body style="font-family:'Poppins',sans-serif;background:#000010;color:#00ffff;text-align:center;padding:60px;">
   <h1 style="font-size:3rem;text-shadow:0 0 30px #00ffff;">About Rajat Sharma</h1>
   <p style="margin-top:30px;font-size:1.3rem;line-height:1.8;color:#aee7ff;">
-    DevOps Engineer with expertise in AWS, Docker, Kubernetes, Terraform, and CI/CD pipelines.  
-    Passionate about automation, scalability, and modern cloud infrastructure.
+    DevOps Engineer with expertise in AWS, Docker, Kubernetes, Terraform, and CI/CD pipelines.<br>
+    Passionate about automation, scalability, and cloud-native architecture.
   </p>
   <a href="/" style="color:#00ffff;text-decoration:none;font-size:1.2rem;">← Back to Home</a>
   </body></html>`);
 });
 
-// ---------------- METRICS PAGE ----------------
-app.get("/metrics", (req, res) => {
+// ---------------- DASHBOARD (Metrics + Build Status + Cluster Info) ----------------
+app.get("/dashboard", (req, res) => {
   const totalMem = os.totalmem() / (1024 ** 3);
   const freeMem = os.freemem() / (1024 ** 3);
   const usedMem = totalMem - freeMem;
   const uptime = (os.uptime() / 3600).toFixed(2);
+  const cpuCores = os.cpus().length;
+  const platform = os.platform();
+  
+  let clusterInfo = "";
+  try {
+    clusterInfo = execSync("kubectl get nodes -o wide").toString();
+  } catch {
+    clusterInfo = "❌ Unable to fetch Kubernetes nodes info (Minikube may not be running)";
+  }
+
+  let buildStatus = "";
+  try {
+    buildStatus = execSync("cat /var/lib/jenkins/workspace/Helm-Minikube-Deployment/build-status.txt || echo 'N/A'").toString();
+  } catch {
+    buildStatus = "❌ Jenkins build status not available";
+  }
 
   res.send(`
-  <html><body style="background:#000;color:#00ffff;font-family:'Poppins',sans-serif;text-align:center;padding:50px;">
-  <h1>⚙️ Server Metrics</h1>
-  <p>CPU Cores: ${os.cpus().length}</p>
-  <p>Memory Used: ${usedMem.toFixed(2)} GB / ${totalMem.toFixed(2)} GB</p>
-  <p>Uptime: ${uptime} hours</p>
-  <p>Platform: ${os.platform()}</p>
-  <meta http-equiv="refresh" content="10">
-  <a href="/" style="color:#00ffff;">← Back</a>
-  </body></html>`);
+  <html>
+  <head>
+    <title>Rajat Sharma | DevOps Dashboard</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      body { background:#000015; color:#00ffff; font-family:'Poppins',sans-serif; padding:40px; text-align:center; }
+      h1 { color:#00ffff; text-shadow:0 0 25px #00ffff; font-size:2.5rem; }
+      section { margin:50px auto; width:80%; background:rgba(255,255,255,0.05); padding:30px; border-radius:20px; box-shadow:0 0 25px rgba(0,255,255,0.1); }
+      pre { text-align:left; color:#aee7ff; background:#000; padding:20px; border-radius:10px; overflow-x:auto; }
+      .stat { font-size:1.1rem; color:#bff; }
+      a { color:#00ffff; text-decoration:none; }
+      a:hover { text-shadow:0 0 10px #00ffff; }
+    </style>
+  </head>
+  <body>
+    <h1>⚙️ DevOps Control Dashboard</h1>
+    <section>
+      <h2>💻 System Metrics</h2>
+      <p class="stat">CPU Cores: ${cpuCores}</p>
+      <p class="stat">Memory Used: ${usedMem.toFixed(2)} GB / ${totalMem.toFixed(2)} GB</p>
+      <p class="stat">Uptime: ${uptime} hours</p>
+      <p class="stat">Platform: ${platform}</p>
+    </section>
+
+    <section>
+      <h2>🚀 Jenkins Build Status</h2>
+      <pre>${buildStatus}</pre>
+    </section>
+
+    <section>
+      <h2>☸️ Kubernetes Cluster Info</h2>
+      <pre>${clusterInfo}</pre>
+    </section>
+
+    <footer style="margin-top:40px;color:#aee7ff;">
+      <a href="/">← Back to Home</a>
+    </footer>
+  </body>
+  </html>
+  `);
 });
 
 // ---------------- LOGS PAGE ----------------
 app.get("/logs", (req, res) => {
   try {
-    const logs = execSync("docker logs node-cicd --tail 15").toString();
-    res.send(`<pre style="background:#000;color:#00ffff;padding:20px;">${logs}</pre><meta http-equiv="refresh" content="5">`);
+    const logs = execSync("docker logs node-cicd --tail 20").toString();
+    res.send(`<meta http-equiv="refresh" content="5"><pre style="background:#000;color:#00ffff;padding:20px;">${logs}</pre>`);
   } catch {
-    res.send("<p style='color:red;text-align:center;padding:20px;'>No container logs available.</p>");
+    res.send("<p style='color:red;padding:20px;'>No container logs available.</p>");
   }
 });
 
