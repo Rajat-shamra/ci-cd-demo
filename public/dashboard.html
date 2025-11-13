@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rajat Sharma | DevOps Dashboard</title>
+  <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+
+<body>
+
+  <h1 class="title">Rajat Sharma — DevOps Dashboard</h1>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>CPU Usage</h3>
+      <div class="circle" id="cpuCircle">0%</div>
+    </div>
+
+    <div class="card">
+      <h3>Memory Usage</h3>
+      <div class="circle" id="memCircle">0%</div>
+    </div>
+
+    <div class="card wide">
+      <h3>Docker Containers</h3>
+      <pre id="docker" class="terminal">Loading...</pre>
+    </div>
+
+    <div class="card wide">
+      <h3>Kubernetes Pods</h3>
+      <pre id="pods" class="terminal">Loading...</pre>
+    </div>
+
+    <div class="card wide">
+      <h3>Helm Releases</h3>
+      <pre id="helm" class="terminal">Loading...</pre>
+    </div>
+
+  </div>
+
+<script src="./js/dashboard.js"></script>
+</body>
+</html>
