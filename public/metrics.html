@@ -1,19 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Live Metrics</title>
-  <meta charset="UTF-8">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8" />
+  <title>Cinematic System Metrics | Rajat Sharma</title>
+  <link rel="stylesheet" href="./css/metrics.css" />
 </head>
 
 <body>
 
-<h1>Live System Metrics</h1>
+<div class="grid-bg"></div>
 
-<canvas id="cpuChart"></canvas>
-<canvas id="memChart"></canvas>
+<div class="container">
 
-<script src="/js/metrics.js"></script>
+  <h1 class="title">Rajat Sharma – Live DevOps Metrics</h1>
+  <p class="subtitle">Real-time System, Docker & Node Server Stats</p>
+
+  <!-- SYSTEM PANEL -->
+  <div class="panel">
+    <h2>System Metrics</h2>
+    <div class="metric-box">
+      <p>CPU Cores: <span id="cpu"></span></p>
+      <p>Total Memory: <span id="total"></span> GB</p>
+      <p>Used Memory: <span id="used"></span> GB</p>
+      <p>Uptime: <span id="uptime"></span> hrs</p>
+    </div>
+    <canvas id="memChart"></canvas>
+  </div>
+
+  <!-- DOCKER PANEL -->
+  <div class="panel">
+    <h2>Docker Containers</h2>
+    <p>Total Running: <span id="dockercount"></span></p>
+    <ul id="dockerlist"></ul>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+setInterval(async () => {
+  const res = await fetch("/api/metrics");
+  const data = await res.json();
+
+  document.getElementById("cpu").textContent = data.cpuCores;
+  document.getElementById("total").textContent = (data.totalMemBytes / 1024/1024/1024).toFixed(2);
+  document.getElementById("used").textContent = (data.usedMemBytes / 1024/1024/1024).toFixed(2);
+  document.getElementById("uptime").textContent = (data.uptimeSec / 3600).toFixed(2);
+
+  document.getElementById("dockercount").textContent = data.dockerCount;
+
+  let list = "";
+  data.containers.forEach(c => {
+    list += `<li>${c}</li>`;
+  });
+  document.getElementById("dockerlist").innerHTML = list;
+
+  // chart update
+  memChart.data.labels.push("");
+  memChart.data.datasets[0].data.push((data.usedMemBytes / 1024/1024/1024).toFixed(2));
+  if (memChart.data.labels.length > 20) {
+    memChart.data.labels.shift();
+    memChart.data.datasets[0].data.shift();
+  }
+  memChart.update();
+
+}, 2000);
+
+// chart
+const ctx = document.getElementById("memChart").getContext("2d");
+const memChart = new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: [],
+    datasets: [{
+      label: "Used Memory (GB)",
+      data: [],
+      borderColor: "#00f0ff",
+      borderWidth: 3,
+      cubicInterpolationMode: "monotone",
+      tension: 0.4,
+      fill: false,
+      pointRadius: 0,
+      glow: true
+    }]
+  },
+  options: {
+    plugins: { legend: { labels: { color: "#00ffff" } } },
+    scales: {
+      x: { ticks: { color: "#0ff" }, grid: { color: "rgba(0,255,255,0.05)" } },
+      y: { ticks: { color: "#0ff" }, grid: { color: "rgba(0,255,255,0.05)" } }
+    }
+  }
+});
+</script>
+
 </body>
 </html>
