@@ -1,0 +1,74 @@
+body {
+  background: #000814;
+  color: cyan;
+  font-family: Poppins, sans-serif;
+  margin: 0;
+  padding-bottom: 40px;
+}
+
+.title {
+  text-align: center;
+  padding: 25px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #00ffff;
+  text-shadow: 0 0 25px #00ffff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+  padding: 20px;
+}
+
+.card {
+  background: #001f3faa;
+  border-radius: 20px;
+  padding: 25px;
+  border: 2px solid #00ffff55;
+  box-shadow: 0 0 30px #00ffff33;
+  backdrop-filter: blur(6px);
+  animation: glow 3s infinite alternate;
+}
+
+.card h3 {
+  text-align: center;
+  color: #00eaff;
+  text-shadow: 0 0 15px #00eaff;
+}
+
+.circle {
+  width: 160px;
+  height: 160px;
+  margin: 20px auto;
+  border-radius: 50%;
+  border: 6px solid #00ffff88;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  font-weight: bold;
+  color: #00ffff;
+  box-shadow: 0 0 30px #00ffff66;
+}
+
+.wide {
+  grid-column: span 2;
+}
+
+.terminal {
+  background: #000;
+  color: #00ff9d;
+  padding: 12px;
+  border-radius: 12px;
+  height: 200px;
+  overflow-y: auto;
+  font-size: 14px;
+  box-shadow: inset 0 0 25px #00ffcc55;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 20px #00ffff55; }
+  100% { box-shadow: 0 0 35px #00ffffaa; }
+}
