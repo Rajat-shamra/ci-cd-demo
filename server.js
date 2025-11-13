@@ -1,37 +1,39 @@
 /**
  * Rajat Sharma | DevOps Engineer Portfolio
- * Final Cinematic Server (Clean + Professional + Scalable)
+ * Final Cinematic Server – Clean, Stable, Professional
  */
 
 const express = require("express");
 const path = require("path");
 const os = require("os");
-const { execSync } = require("child_process");
+const { exec } = require("child_process");
 
 const app = express();
-
-// Static files (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+
 
 // ---------------- HOME ----------------
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "home.html"));
 });
 
+
 // ---------------- ABOUT ----------------
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
 });
 
-// ---------------- CONTACT FORM PAGE ----------------
+
+// ---------------- CONTACT PAGE ----------------
 app.get("/contact", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "contact.html"));
 });
 
-// ---------------- CONTACT FORM SUBMIT ----------------
+
+// ---------------- CONTACT SUBMIT ----------------
 app.post("/contact", (req, res) => {
-  console.log("New contact form submission:", req.body);
+  console.log("New Contact Message:", req.body);
 
   res.send(`
     <html>
@@ -44,46 +46,93 @@ app.post("/contact", (req, res) => {
   `);
 });
 
-// ---------------- METRICS UI ----------------
+
+// ---------------- METRICS UI PAGE ----------------
 app.get("/metrics", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "metrics.html"));
 });
 
-// ---------------- METRICS API ----------------
-app.get("/metrics-data", (req, res) => {
-  const total = os.totalmem() / 1024 / 1024 / 1024;
-  const free = os.freemem() / 1024 / 1024 / 1024;
-  const used = total - free;
 
-  res.json({
-    cpu: os.cpus().length,
-    used: used.toFixed(2),
-    total: total.toFixed(2),
-    uptime: (os.uptime() / 3600).toFixed(2)
-  });
+// ---------------- SYSTEM METRICS API ----------------
+app.get("/api/metrics", async (req, res) => {
+  try {
+    const total = os.totalmem();
+    const free = os.freemem();
+    const used = total - free;
+
+    // Get Docker Container Count
+    exec('docker ps --format "{{.Names}}" || true', (err, stdout) => {
+      let containers = [];
+      if (!err && stdout.trim()) {
+        containers = stdout.split("\n").filter(Boolean);
+      }
+
+      res.json({
+        ok: true,
+        cpuCores: os.cpus().length,
+        usedMemBytes: used,
+        totalMemBytes: total,
+        freeMemBytes: free,
+        uptimeSec: os.uptime(),
+        dockerCount: containers.length,
+        containers: containers,
+        timestamp: Date.now()
+      });
+    });
+
+  } catch (e) {
+    res.json({ ok: false, error: e.message });
+  }
 });
 
-// ---------------- LOGS PAGE ----------------
+
+// ---------------- DOCKER CONTAINER DETAILS API ----------------
+app.get("/api/containers", (req, res) => {
+  exec('docker ps --format "{{.ID}} {{.Names}} {{.Image}} {{.Status}}" || true',
+    (err, stdout) => {
+      if (err || !stdout.trim()) {
+        return res.json({ ok: true, containers: [] });
+      }
+
+      const containers = stdout
+        .trim()
+        .split("\n")
+        .map(line => {
+          const p = line.split(" ");
+          return {
+            id: p[0],
+            name: p[1],
+            image: p[2],
+            status: p.slice(3).join(" ")
+          };
+        });
+
+      res.json({ ok: true, containers });
+    });
+});
+
+
+// ---------------- LOGS UI PAGE ----------------
 app.get("/logs", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "logs.html"));
 });
 
-// ---------------- DOCKER LOGS API ----------------
+
+// ---------------- DOCKER APP LOGS API ----------------
 app.get("/get-logs", (req, res) => {
-  try {
-    const logs = execSync("docker logs node-cicd --tail 50").toString();
-    res.send(logs);
-  } catch {
-    res.send("No Docker container logs found");
-  }
+  exec("docker logs node-cicd --tail 50 || true", (err, stdout) => {
+    res.send(stdout || "No Docker container logs found");
+  });
 });
 
-// ---------------- HEALTH ----------------
+
+// ---------------- HEALTH CHECK ----------------
 app.get("/health", (req, res) => {
   res.json({ status: "healthy", time: new Date().toISOString() });
 });
 
-// ---------------- SERVER START ----------------
+
+// ---------------- START SERVER ----------------
 app.listen(3000, () => {
-  console.log("Cinematic DevOps Portfolio running at http://localhost:3000");
+  console.log("✔ Rajat Sharma Portfolio running at http://localhost:3000");
 });
