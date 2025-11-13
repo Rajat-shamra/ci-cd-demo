@@ -9,6 +9,8 @@ const os = require("os");
 const { exec } = require("child_process");
 
 const app = express();
+
+// Static Files
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,7 +40,7 @@ app.post("/contact", (req, res) => {
   res.send(`
     <html>
       <body style="background:black;color:cyan;font-family:monospace;padding:40px;text-align:center;">
-        <h2>Your message is received</h2>
+        <h2>Your message has been received</h2>
         <p>Thank you for contacting Rajat Sharma</p>
         <a href="/" style="color:#00ffff;">Back to Home</a>
       </body>
@@ -54,35 +56,30 @@ app.get("/metrics", (req, res) => {
 
 
 // ---------------- SYSTEM METRICS API ----------------
-app.get("/api/metrics", async (req, res) => {
-  try {
-    const total = os.totalmem();
-    const free = os.freemem();
-    const used = total - free;
+app.get("/api/metrics", (req, res) => {
+  const total = os.totalmem();
+  const free = os.freemem();
+  const used = total - free;
 
-    // Get Docker Container Count
-    exec('docker ps --format "{{.Names}}" || true', (err, stdout) => {
-      let containers = [];
-      if (!err && stdout.trim()) {
-        containers = stdout.split("\n").filter(Boolean);
-      }
+  exec('docker ps --format "{{.Names}}" || true', (err, stdout) => {
+    let containers = [];
 
-      res.json({
-        ok: true,
-        cpuCores: os.cpus().length,
-        usedMemBytes: used,
-        totalMemBytes: total,
-        freeMemBytes: free,
-        uptimeSec: os.uptime(),
-        dockerCount: containers.length,
-        containers: containers,
-        timestamp: Date.now()
-      });
+    if (!err && stdout.trim()) {
+      containers = stdout.trim().split("\n");
+    }
+
+    res.json({
+      ok: true,
+      cpuCores: os.cpus().length,
+      usedMem: used,
+      totalMem: total,
+      freeMem: free,
+      uptimeSec: os.uptime(),
+      dockerCount: containers.length,
+      containers: containers,
+      timestamp: Date.now()
     });
-
-  } catch (e) {
-    res.json({ ok: false, error: e.message });
-  }
+  });
 });
 
 
@@ -94,34 +91,32 @@ app.get("/api/containers", (req, res) => {
         return res.json({ ok: true, containers: [] });
       }
 
-      const containers = stdout
-        .trim()
-        .split("\n")
-        .map(line => {
-          const p = line.split(" ");
-          return {
-            id: p[0],
-            name: p[1],
-            image: p[2],
-            status: p.slice(3).join(" ")
-          };
-        });
+      const containers = stdout.trim().split("\n").map(line => {
+        const p = line.split(" ");
+        return {
+          id: p[0],
+          name: p[1],
+          image: p[2],
+          status: p.slice(3).join(" ")
+        };
+      });
 
       res.json({ ok: true, containers });
-    });
+    }
+  );
 });
 
 
-// ---------------- LOGS UI PAGE ----------------
+// ---------------- LOGS UI ----------------
 app.get("/logs", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "logs.html"));
 });
 
 
-// ---------------- DOCKER APP LOGS API ----------------
+// ---------------- DOCKER LOGS API ----------------
 app.get("/get-logs", (req, res) => {
   exec("docker logs node-cicd --tail 50 || true", (err, stdout) => {
-    res.send(stdout || "No Docker container logs found");
+    res.send(stdout || "No Docker logs found");
   });
 });
 
@@ -132,7 +127,23 @@ app.get("/health", (req, res) => {
 });
 
 
+// ---------------- DASHBOARD UI PAGE ----------------
+app.get("/dashboard", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
+});
+
+
+// ---------------- COMMAND EXECUTOR API ----------------
+app.get("/run", (req, res) => {
+  const cmd = req.query.cmd;
+
+  exec(cmd + " || true", (err, stdout) => {
+    res.send(stdout || "No output");
+  });
+});
+
+
 // ---------------- START SERVER ----------------
 app.listen(3000, () => {
-  console.log("✔ Rajat Sharma Portfolio running at http://localhost:3000");
+  console.log("✔ Rajat Sharma Portfolio running at: http://localhost:3000");
 });
