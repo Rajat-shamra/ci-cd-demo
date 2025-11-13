@@ -1,12 +1,152 @@
-/* CONTACT PAGE */
+/* -----------------------------------
+   GLOBAL VARIABLES
+----------------------------------- */
+:root {
+  --accent: #00ffff;
+  --bg1: #001f3f;
+  --bg2: #000814;
+}
+
+/* -----------------------------------
+   GLOBAL PAGE STYLE
+----------------------------------- */
+body {
+  font-family: Poppins, Arial, sans-serif;
+  background: radial-gradient(circle at 20% 20%, var(--bg1), var(--bg2));
+  color: #e6fbff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Particles */
+#particles {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+}
+
+/* -----------------------------------
+   NAVBAR
+----------------------------------- */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.brand {
+  font-size: 1.8rem;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.nav-links a {
+  margin-left: 25px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #bfeaff;
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+
+/* -----------------------------------
+   HERO SECTION
+----------------------------------- */
+.hero {
+  text-align: center;
+  padding: 120px 20px 80px;
+}
+
+.hero-title {
+  font-size: 4.5rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--accent), #0077ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.hero-sub {
+  margin-top: 10px;
+  font-size: 1.7rem;
+  color: #cfeaff;
+}
+
+.hero-desc {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: auto;
+  color: #d8f7ff;
+  line-height: 1.7;
+}
+
+.hero-cta .btn {
+  padding: 14px 35px;
+  border-radius: 30px;
+  background: linear-gradient(90deg, var(--accent), #0077ff);
+  display: inline-block;
+  margin: 15px 10px;
+  font-weight: 700;
+  text-decoration: none;
+  color: white;
+  transition: 0.25s;
+}
+
+.hero-cta .btn:hover {
+  transform: scale(1.06);
+}
+
+/* -----------------------------------
+   PROJECT SECTION
+----------------------------------- */
+.projects {
+  text-align: center;
+  padding: 70px 10%;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.card {
+  padding: 25px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.card h4 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: var(--accent);
+}
+
+/* -----------------------------------
+   CONTACT FORM
+----------------------------------- */
 .contact-container {
   text-align: center;
-  margin-top: 120px;
-  color: #e6fbff;
+  padding: 120px 10%;
 }
 
 .contact-container h1 {
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: 700;
   margin-bottom: 20px;
   background: linear-gradient(90deg, var(--accent), #0077ff);
@@ -16,62 +156,56 @@
 
 .contact-box {
   max-width: 550px;
-  margin: 0 auto;
-  margin-top: 20px;
-  background: rgba(255,255,255,0.06);
-  padding: 30px;
-  border-radius: 18px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 20px;
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
 .contact-box input,
 .contact-box textarea {
   width: 100%;
-  padding: 14px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
   border-radius: 10px;
   border: none;
-  outline: none;
-  background: rgba(255,255,255,0.15);
-  color: white;
   font-size: 1rem;
 }
 
-.contact-box textarea {
-  height: 140px;
+textarea {
+  height: 120px;
   resize: none;
 }
 
 .submit-btn {
-  margin-top: 12px;
-  width: 100%;
-  padding: 14px 20px;
+  padding: 14px 0;
   background: linear-gradient(90deg, var(--accent), #0077ff);
   color: white;
-  font-size: 1.1rem;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
+  border-radius: 10px;
   font-weight: 700;
-  box-shadow: 0 0 20px rgba(0,255,255,0.2);
+  font-size: 1.1rem;
+  cursor: pointer;
 }
 
 .submit-btn:hover {
-  transform: scale(1.05);
-  transition: 0.25s ease;
-  box-shadow: 0 0 30px rgba(0,255,255,0.35);
+  opacity: 0.85;
+  transform: scale(1.03);
 }
 
-/* RESPONSIVE CONTACT PAGE */
-@media (max-width: 600px) {
-  .contact-container h1 {
-    font-size: 1.8rem;
-  }
-
-  .contact-box {
-    padding: 20px;
-  }
+/* -----------------------------------
+   FOOTER
+----------------------------------- */
+.footer {
+  text-align: center;
+  padding: 35px;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  font-size: 0.9rem;
+  margin-top: 60px;
 }
