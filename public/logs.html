@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logs</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<h1>Docker Container Logs</h1>
+
+<pre id="logsBox">Loading logs...</pre>
+
+<script>
+async function load(){
+  const data = await fetch("/get-logs");
+  document.getElementById("logsBox").innerText = await data.text();
+}
+setInterval(load, 3000);
+load();
+</script>
+
+</body>
+</html>
