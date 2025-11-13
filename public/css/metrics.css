@@ -1,0 +1,66 @@
+body {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: black;
+  color: cyan;
+  overflow-x: hidden;
+}
+
+/* Cinematic scrolling grid background */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(0,255,255,0.07) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0,255,255,0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridmove 14s linear infinite;
+  z-index: -1;
+}
+
+@keyframes gridmove {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 0 200px, 200px 0; }
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+}
+
+.title {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 32px;
+  color: #00eaff;
+}
+
+.subtitle {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #77ffff;
+}
+
+
+/* PANELS */
+.panel {
+  background: rgba(0, 20, 30, 0.7);
+  border: 1px solid cyan;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 40px;
+  box-shadow: 0 0 20px cyan;
+}
+
+.metric-box {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style: none;
+}
+
+ul li {
+  padding: 6px;
+  border-bottom: 1px solid rgba(0,255,255,0.2);
+}
