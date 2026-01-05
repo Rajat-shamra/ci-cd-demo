@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: localhost:32000/ceo-backend
+  pullPolicy: IfNotPresent
+  tag: latest
+
+service:
+  type: NodePort
+  port: 5000
