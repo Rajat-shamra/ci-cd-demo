@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: localhost:32000/ceo-backend
   pullPolicy: IfNotPresent
-  tag: 20
+  tag: 21
 
 service:
   type: NodePort
