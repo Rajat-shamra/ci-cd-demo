@@ -1,67 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rajat Sharma | DevOps Engineer</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+<section id="gitops" style="background: rgba(0,0,0,0.9); color: #00f2ff; padding: 60px 20px; border-top: 1px solid #00f2ff; font-family: 'Courier New', monospace;">
+    <div style="max-width: 1000px; margin: 0 auto;">
+        
+        <h2 style="text-align: center; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px;">
+            <span style="height: 12px; width: 12px; background-color: #39FF14; border-radius: 50%; display: inline-block; margin-right: 10px; box-shadow: 0 0 10px #39FF14; animation: blink 1.5s infinite;"></span>
+            GitOps Architecture & Cloud Status
+        </h2>
+        
+        <div style="display: flex; justify-content: space-between; align-items: stretch; flex-wrap: wrap; gap: 20px;">
+            
+            <div style="flex: 1; min-width: 320px; border: 1px solid #333; padding: 25px; background: #0a0a0a; border-radius: 5px;">
+                <p style="color: #39FF14; font-weight: bold; margin-bottom: 20px;">[LIVE_PIPELINE_STATUS]</p>
+                <div id="gitops-details" style="line-height: 2;">
+                    <p>> ENGINE: <span id="engine" style="color: #fff;">...</span></p>
+                    <p>> CI/CD: <span id="pipeline" style="color: #fff;">...</span></p>
+                    <p>> CLOUD: <span id="cloud" style="color: #fff;">...</span></p>
+                    <p>> SYNC: <span id="sync" style="color: #fff;">...</span></p>
+                    <p>> REPO: <span id="repo" style="font-size: 0.8em; color: #555;">...</span></p>
+                </div>
+            </div>
 
-<body>
-
-  <canvas id="particles"></canvas>
-
-  <nav class="nav">
-    <div class="brand">Rajat Sharma</div>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/metrics">Metrics</a>
-      <a href="/logs">Logs</a>
-      <a href="/contact">Contact</a>
+            <div style="flex: 1; min-width: 320px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="border: 1px solid #00f2ff; padding: 20px; text-align: center; transition: 0.3s; cursor: crosshair;" onmouseover="this.style.background='#00f2ff'; this.style.color='black';" onmouseout="this.style.background='transparent'; this.style.color='#00f2ff';">AWS / EKS</div>
+                <div style="border: 1px solid #00f2ff; padding: 20px; text-align: center; transition: 0.3s; cursor: crosshair;" onmouseover="this.style.background='#00f2ff'; this.style.color='black';" onmouseout="this.style.background='transparent'; this.style.color='#00f2ff';">JENKINS</div>
+                <div style="border: 1px solid #00f2ff; padding: 20px; text-align: center; transition: 0.3s; cursor: crosshair;" onmouseover="this.style.background='#00f2ff'; this.style.color='black';" onmouseout="this.style.background='transparent'; this.style.color='#00f2ff';">ARGOCD</div>
+                <div style="border: 1px solid #00f2ff; padding: 20px; text-align: center; transition: 0.3s; cursor: crosshair;" onmouseover="this.style.background='#00f2ff'; this.style.color='black';" onmouseout="this.style.background='transparent'; this.style.color='#00f2ff';">HELM v3</div>
+            </div>
+        </div>
     </div>
-  </nav>
+</section>
 
-  <section class="hero">
-    <h1 class="hero-title">Rajat Sharma</h1>
-    <h2 class="hero-sub">DevOps Engineer · Kubernetes · AWS · CI/CD</h2>
-    <p class="hero-desc">
-      Building scalable, automated, and production-ready DevOps systems with Kubernetes, AWS, CI/CD pipelines, and Docker.
-    </p>
+<style>
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
+    }
+</style>
 
-    <div class="hero-cta">
-      <a href="/about" class="btn">About Me</a>
-      <a href="/metrics" class="btn">Live Metrics</a>
-      <a href="https://github.com/rajatsharma-dev" target="_blank" class="btn">GitHub</a>
-    </div>
-  </section>
-
-  <section class="projects">
-    <h2>Featured Projects</h2>
-
-    <div class="cards">
-      <div class="card">
-        <h4>Kubernetes Platform</h4>
-        <p>High-availability cluster with monitoring and alerts.</p>
-      </div>
-
-      <div class="card">
-        <h4>CI/CD Pipelines</h4>
-        <p>Automated deployments using Jenkins, GitHub, Docker.</p>
-      </div>
-
-      <div class="card">
-        <h4>Monitoring Stack</h4>
-        <p>Prometheus + Grafana dashboards with alert system.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    © 2025 Rajat Sharma | DevOps, Docker, Jenkins, Kubernetes
-  </footer>
-
-  <script src="/js/particles.js"></script>
-
-</body>
-</html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/api/gitops-status')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('engine').innerText = data.engine;
+                document.getElementById('pipeline').innerText = data.pipeline;
+                document.getElementById('cloud').innerText = data.cloudProvider;
+                document.getElementById('sync').innerText = data.syncPolicy;
+                document.getElementById('repo').innerText = data.repository;
+            })
+            .catch(err => {
+                document.getElementById('gitops-details').innerHTML = "<p style='color:red;'>Connection to CI/CD API failed.</p>";
+            });
+    });
+</script>
