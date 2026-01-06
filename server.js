@@ -14,29 +14,24 @@ const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-
 // ---------------- HOME ----------------
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "home.html"));
 });
-
 
 // ---------------- ABOUT ----------------
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
 });
 
-
 // ---------------- CONTACT PAGE ----------------
 app.get("/contact", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "contact.html"));
 });
 
-
 // ---------------- CONTACT SUBMIT ----------------
 app.post("/contact", (req, res) => {
   console.log("New Contact Message:", req.body);
-
   res.send(`
     <html>
       <body style="background:black;color:cyan;font-family:monospace;padding:40px;text-align:center;">
@@ -48,12 +43,10 @@ app.post("/contact", (req, res) => {
   `);
 });
 
-
 // ---------------- METRICS UI PAGE ----------------
 app.get("/metrics", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "metrics.html"));
 });
-
 
 // ---------------- SYSTEM METRICS API ----------------
 app.get("/api/metrics", (req, res) => {
@@ -63,11 +56,9 @@ app.get("/api/metrics", (req, res) => {
 
   exec('docker ps --format "{{.Names}}" || true', (err, stdout) => {
     let containers = [];
-
     if (!err && stdout.trim()) {
       containers = stdout.trim().split("\n");
     }
-
     res.json({
       ok: true,
       cpuCores: os.cpus().length,
@@ -82,7 +73,6 @@ app.get("/api/metrics", (req, res) => {
   });
 });
 
-
 // ---------------- DOCKER CONTAINER DETAILS API ----------------
 app.get("/api/containers", (req, res) => {
   exec('docker ps --format "{{.ID}} {{.Names}} {{.Image}} {{.Status}}" || true',
@@ -90,7 +80,6 @@ app.get("/api/containers", (req, res) => {
       if (err || !stdout.trim()) {
         return res.json({ ok: true, containers: [] });
       }
-
       const containers = stdout.trim().split("\n").map(line => {
         const p = line.split(" ");
         return {
@@ -100,27 +89,22 @@ app.get("/api/containers", (req, res) => {
           status: p.slice(3).join(" ")
         };
       });
-
       res.json({ ok: true, containers });
     }
   );
 });
-
 
 // ---------------- LOGS UI ----------------
 app.get("/logs", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "logs.html"));
 });
 
-
 // ---------------- DOCKER LOGS API ----------------
 app.get("/get-logs", (req, res) => {
-  // Yahan humne container name 'ceo-backend' kar diya hai jo pipeline se aata hai
   exec("docker logs ceo-backend --tail 50 || true", (err, stdout) => {
     res.send(stdout || "No Docker logs found");
   });
 });
-
 
 // ---------------- HEALTH CHECK ----------------
 app.get("/health", (req, res) => {
@@ -131,26 +115,20 @@ app.get("/health", (req, res) => {
   });
 });
 
-
 // ---------------- DASHBOARD UI PAGE ----------------
 app.get("/dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "dashboard.html"));
 });
 
-
 // ---------------- COMMAND EXECUTOR API ----------------
 app.get("/run", (req, res) => {
   const cmd = req.query.cmd;
-
   exec(cmd + " || true", (err, stdout) => {
     res.send(stdout || "No output");
   });
 });
 
-// ==========================================================
-// 🚀 NEW SECTION: GITOPS & CLOUD INFRASTRUCTURE (Added for Rajat)
-// ==========================================================
-
+// ---------------- GITOPS & CLOUD INFRASTRUCTURE API ----------------
 app.get("/api/gitops-status", (req, res) => {
     res.json({
         engine: "ArgoCD",
@@ -158,17 +136,11 @@ app.get("/api/gitops-status", (req, res) => {
         repository: "github.com/Rajat-shamra/ci-cd-demo",
         syncPolicy: "Automated (Self-Healing)",
         deploymentStrategy: "Rolling Update",
-        cloudProvider: "AWS",
-        cluster: "MicroK8s / EKS",
+        cloudProvider: "AWS (EKS)",
+        cluster: "MicroK8s",
         helmVersion: "v3.x"
     });
 });
-
-app.get("/gitops", (req, res) => {
-    // Ye ek naya page hoga tumhare portfolio mein
-    res.sendFile(path.join(__dirname, "public", "gitops.html"));
-});
-
 
 // ---------------- START SERVER ----------------
 app.listen(3000, () => {
