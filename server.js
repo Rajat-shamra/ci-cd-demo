@@ -1,7 +1,6 @@
 /**
  * Rajat Sharma | DevOps Engineer Portfolio
- * Version: 2.0.0 (Cinematic GitOps Edition)
- * Tools: AWS, Jenkins, ArgoCD, Helm, Docker, Kubernetes
+ * Final Cinematic Server – Clean, Stable, Professional
  */
 
 const express = require("express");
@@ -11,157 +10,168 @@ const { exec } = require("child_process");
 
 const app = express();
 
-// Middleware
+// Static Files
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-// ---------------- UI ROUTES ----------------
-app.get("/", (req, res) => res.sendFile(path.join(__dirname, "public", "home.html")));
-app.get("/about", (req, res) => res.sendFile(path.join(__dirname, "public", "about.html")));
-app.get("/contact", (req, res) => res.sendFile(path.join(__dirname, "public", "contact.html")));
-app.get("/metrics", (req, res) => res.sendFile(path.join(__dirname, "public", "metrics.html")));
-app.get("/logs", (req, res) => res.sendFile(path.join(__dirname, "public", "logs.html")));
-app.get("/dashboard", (req, res) => res.sendFile(path.join(__dirname, "public", "dashboard.html")));
 
-// ---------------- SYSTEM METRICS ENGINE (Detailed) ----------------
-app.get("/api/metrics", (req, res) => {
-    const totalMem = os.totalmem();
-    const freeMem = os.freemem();
-    const usedMem = totalMem - freeMem;
-    const loadAvg = os.loadavg(); // Returns 1, 5, and 15 minute load averages
-
-    exec('docker ps --format "{{.Names}}" || true', (err, stdout) => {
-        let containers = [];
-        if (!err && stdout.trim()) {
-            containers = stdout.trim().split("\n");
-        }
-
-        res.json({
-            ok: true,
-            hostname: os.hostname(),
-            platform: os.platform(),
-            architecture: os.arch(),
-            cpuCores: os.cpus().length,
-            cpuModel: os.cpus()[0].model,
-            loadAverage: loadAvg,
-            memory: {
-                total: (totalMem / (1024 * 1024 * 1024)).toFixed(2) + " GB",
-                used: (usedMem / (1024 * 1024 * 1024)).toFixed(2) + " GB",
-                free: (freeMem / (1024 * 1024 * 1024)).toFixed(2) + " GB",
-                percentage: ((usedMem / totalMem) * 100).toFixed(2) + "%"
-            },
-            uptime: {
-                seconds: os.uptime(),
-                formatted: new Date(os.uptime() * 1000).toISOString().substr(11, 8)
-            },
-            docker: {
-                count: containers.length,
-                list: containers
-            },
-            devopsStack: {
-                ci: "Jenkins (Pipeline-as-Code)",
-                cd: "ArgoCD (Pull-based GitOps)",
-                cloud: "AWS (Elastic Kubernetes Service)",
-                iac: "Terraform / Helm Charts"
-            },
-            timestamp: Date.now()
-        });
-    });
+// ---------------- HOME ----------------
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "home.html"));
 });
 
-// ---------------- DOCKER OPERATIONS API ----------------
-app.get("/api/containers", (req, res) => {
-    // Detailed Docker info: ID, Name, Image, Status, Ports
-    exec('docker ps --format "{{.ID}} | {{.Names}} | {{.Image}} | {{.Status}} | {{.Ports}}" || true', (err, stdout) => {
-        if (err || !stdout.trim()) {
-            return res.json({ ok: true, containers: [], message: "No active containers" });
-        }
 
-        const containers = stdout.trim().split("\n").map(line => {
-            const parts = line.split(" | ");
-            return {
-                id: parts[0],
-                name: parts[1],
-                image: parts[2],
-                status: parts[3],
-                ports: parts[4]
-            };
-        });
-        res.json({ ok: true, containers });
-    });
+// ---------------- ABOUT ----------------
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "about.html"));
 });
 
-// ---------------- REAL-TIME LOGS ENGINE ----------------
-app.get("/get-logs", (req, res) => {
-    // Fetches last 100 lines of the specific backend container
-    const containerName = "ceo-backend"; 
-    exec(`docker logs ${containerName} --tail 100 || true`, (err, stdout, stderr) => {
-        if (err || stderr) {
-            res.send("LOG_ERROR: Container not found or permissions missing.");
-        } else {
-            res.send(stdout || "Waiting for logs...");
-        }
-    });
+
+// ---------------- CONTACT PAGE ----------------
+app.get("/contact", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "contact.html"));
 });
 
-// ---------------- TERMINAL COMMAND EXECUTOR (POWER-USER) ----------------
-app.get("/run", (req, res) => {
-    const cmd = req.query.cmd;
-    
-    // Security check: Don't allow empty commands
-    if (!cmd) return res.status(400).send("ERROR: No command packet received.");
 
-    console.log(`[EXECUTION]: Executing command -> ${cmd}`);
-    
-    exec(`${cmd} || true`, (err, stdout, stderr) => {
-        if (err) return res.send(`EXEC_ERR: ${err.message}`);
-        res.send(stdout || stderr || "Command executed. No output returned.");
-    });
-});
-
-// ---------------- CONTACT & NOTIFICATIONS ----------------
+// ---------------- CONTACT SUBMIT ----------------
 app.post("/contact", (req, res) => {
-    const { name, email, message } = req.body;
-    console.log(`[ALERT]: New Message from ${name} (${email})`);
+  console.log("New Contact Message:", req.body);
 
-    res.send(`
-        <html>
-            <head><title>Success</title></head>
-            <body style="background:#050505; color:#00ffcc; font-family:'Courier New', monospace; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; border: 5px double #00ffcc;">
-                <h1 style="text-shadow: 0 0 10px #00ffcc;">SYNC COMPLETE</h1>
-                <p style="font-size:1.2rem;">Message injected into Rajat's secure database.</p>
-                <div style="margin-top:20px; padding:15px; border:1px solid #00ffcc;">
-                    Status: 200 OK | Protocol: HTTPS | Origin: Portfolio-GitOps
-                </div>
-                <br>
-                <a href="/" style="color:black; background:#00ffcc; padding:10px 25px; text-decoration:none; font-weight:bold; border-radius:3px;">BACK TO TERMINAL</a>
-            </body>
-        </html>
-    `);
+  res.send(`
+    <html>
+      <body style="background:black;color:cyan;font-family:monospace;padding:40px;text-align:center;">
+        <h2>Your message has been received</h2>
+        <p>Thank you for contacting Rajat Sharma</p>
+        <a href="/" style="color:#00ffff;">Back to Home</a>
+      </body>
+    </html>
+  `);
 });
 
-// ---------------- HEALTH & PIPELINE STATUS ----------------
+
+// ---------------- METRICS UI PAGE ----------------
+app.get("/metrics", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "metrics.html"));
+});
+
+
+// ---------------- SYSTEM METRICS API ----------------
+app.get("/api/metrics", (req, res) => {
+  const total = os.totalmem();
+  const free = os.freemem();
+  const used = total - free;
+
+  exec('docker ps --format "{{.Names}}" || true', (err, stdout) => {
+    let containers = [];
+
+    if (!err && stdout.trim()) {
+      containers = stdout.trim().split("\n");
+    }
+
+    res.json({
+      ok: true,
+      cpuCores: os.cpus().length,
+      usedMem: used,
+      totalMem: total,
+      freeMem: free,
+      uptimeSec: os.uptime(),
+      dockerCount: containers.length,
+      containers: containers,
+      timestamp: Date.now()
+    });
+  });
+});
+
+
+// ---------------- DOCKER CONTAINER DETAILS API ----------------
+app.get("/api/containers", (req, res) => {
+  exec('docker ps --format "{{.ID}} {{.Names}} {{.Image}} {{.Status}}" || true',
+    (err, stdout) => {
+      if (err || !stdout.trim()) {
+        return res.json({ ok: true, containers: [] });
+      }
+
+      const containers = stdout.trim().split("\n").map(line => {
+        const p = line.split(" ");
+        return {
+          id: p[0],
+          name: p[1],
+          image: p[2],
+          status: p.slice(3).join(" ")
+        };
+      });
+
+      res.json({ ok: true, containers });
+    }
+  );
+});
+
+
+// ---------------- LOGS UI ----------------
+app.get("/logs", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "logs.html"));
+});
+
+
+// ---------------- DOCKER LOGS API ----------------
+app.get("/get-logs", (req, res) => {
+  // Yahan humne container name 'ceo-backend' kar diya hai jo pipeline se aata hai
+  exec("docker logs ceo-backend --tail 50 || true", (err, stdout) => {
+    res.send(stdout || "No Docker logs found");
+  });
+});
+
+
+// ---------------- HEALTH CHECK ----------------
 app.get("/health", (req, res) => {
-    res.json({ 
-        status: "UP", 
-        environment: "Production-Kubernetes",
-        gitops: "ArgoCD Managed",
-        build_info: {
-            node_version: process.version,
-            memory_usage: (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2) + " MB"
-        }
+  res.json({ 
+    status: "healthy", 
+    time: new Date().toISOString(),
+    stack: "GitOps Enabled" 
+  });
+});
+
+
+// ---------------- DASHBOARD UI PAGE ----------------
+app.get("/dashboard", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
+});
+
+
+// ---------------- COMMAND EXECUTOR API ----------------
+app.get("/run", (req, res) => {
+  const cmd = req.query.cmd;
+
+  exec(cmd + " || true", (err, stdout) => {
+    res.send(stdout || "No output");
+  });
+});
+
+// ==========================================================
+// 🚀 NEW SECTION: GITOPS & CLOUD INFRASTRUCTURE (Added for Rajat)
+// ==========================================================
+
+app.get("/api/gitops-status", (req, res) => {
+    res.json({
+        engine: "ArgoCD",
+        pipeline: "Jenkins CI/CD",
+        repository: "github.com/Rajat-shamra/ci-cd-demo",
+        syncPolicy: "Automated (Self-Healing)",
+        deploymentStrategy: "Rolling Update",
+        cloudProvider: "AWS",
+        cluster: "MicroK8s / EKS",
+        helmVersion: "v3.x"
     });
 });
 
-// ---------------- SERVER INITIALIZATION ----------------
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`
-    ====================================================
-    🚀 DEPLOYMENT SUCCESSFUL: RAJAT SHARMA PORTFOLIO
-    🖥️  OS: ${os.type()} ${os.release()}
-    📡  PORT: ${PORT}
-    🛠️  STACK: JENKINS | DOCKER | ARGOCD | HELM | AWS
-    ====================================================
-    `);
+app.get("/gitops", (req, res) => {
+    // Ye ek naya page hoga tumhare portfolio mein
+    res.sendFile(path.join(__dirname, "public", "gitops.html"));
+});
+
+
+// ---------------- START SERVER ----------------
+app.listen(3000, () => {
+  console.log("✔ Rajat Sharma Portfolio running at: http://localhost:3000");
+  console.log("✔ GitOps Engine Active: Monitoring Jenkins & ArgoCD");
 });
