@@ -14,24 +14,29 @@ const app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
+
 // ---------------- HOME ----------------
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "home.html"));
 });
+
 
 // ---------------- ABOUT ----------------
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
 });
 
+
 // ---------------- CONTACT PAGE ----------------
 app.get("/contact", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "contact.html"));
 });
 
+
 // ---------------- CONTACT SUBMIT ----------------
 app.post("/contact", (req, res) => {
   console.log("New Contact Message:", req.body);
+
   res.send(`
     <html>
       <body style="background:black;color:cyan;font-family:monospace;padding:40px;text-align:center;">
@@ -43,10 +48,12 @@ app.post("/contact", (req, res) => {
   `);
 });
 
+
 // ---------------- METRICS UI PAGE ----------------
 app.get("/metrics", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "metrics.html"));
 });
+
 
 // ---------------- SYSTEM METRICS API ----------------
 app.get("/api/metrics", (req, res) => {
@@ -56,9 +63,11 @@ app.get("/api/metrics", (req, res) => {
 
   exec('docker ps --format "{{.Names}}" || true', (err, stdout) => {
     let containers = [];
+
     if (!err && stdout.trim()) {
       containers = stdout.trim().split("\n");
     }
+
     res.json({
       ok: true,
       cpuCores: os.cpus().length,
@@ -73,6 +82,7 @@ app.get("/api/metrics", (req, res) => {
   });
 });
 
+
 // ---------------- DOCKER CONTAINER DETAILS API ----------------
 app.get("/api/containers", (req, res) => {
   exec('docker ps --format "{{.ID}} {{.Names}} {{.Image}} {{.Status}}" || true',
@@ -80,6 +90,7 @@ app.get("/api/containers", (req, res) => {
       if (err || !stdout.trim()) {
         return res.json({ ok: true, containers: [] });
       }
+
       const containers = stdout.trim().split("\n").map(line => {
         const p = line.split(" ");
         return {
@@ -89,61 +100,50 @@ app.get("/api/containers", (req, res) => {
           status: p.slice(3).join(" ")
         };
       });
+
       res.json({ ok: true, containers });
     }
   );
 });
+
 
 // ---------------- LOGS UI ----------------
 app.get("/logs", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "logs.html"));
 });
 
+
 // ---------------- DOCKER LOGS API ----------------
 app.get("/get-logs", (req, res) => {
-  exec("docker logs ceo-backend --tail 50 || true", (err, stdout) => {
+  exec("docker logs node-cicd --tail 50 || true", (err, stdout) => {
     res.send(stdout || "No Docker logs found");
   });
 });
 
+
 // ---------------- HEALTH CHECK ----------------
 app.get("/health", (req, res) => {
-  res.json({ 
-    status: "healthy", 
-    time: new Date().toISOString(),
-    stack: "GitOps Enabled" 
-  });
+  res.json({ status: "healthy", time: new Date().toISOString() });
 });
+
 
 // ---------------- DASHBOARD UI PAGE ----------------
 app.get("/dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "dashboard.html"));
 });
 
+
 // ---------------- COMMAND EXECUTOR API ----------------
 app.get("/run", (req, res) => {
   const cmd = req.query.cmd;
+
   exec(cmd + " || true", (err, stdout) => {
     res.send(stdout || "No output");
   });
 });
 
-// ---------------- GITOPS & CLOUD INFRASTRUCTURE API ----------------
-app.get("/api/gitops-status", (req, res) => {
-    res.json({
-        engine: "ArgoCD",
-        pipeline: "Jenkins CI/CD",
-        repository: "github.com/Rajat-shamra/ci-cd-demo",
-        syncPolicy: "Automated (Self-Healing)",
-        deploymentStrategy: "Rolling Update",
-        cloudProvider: "AWS (EKS)",
-        cluster: "MicroK8s",
-        helmVersion: "v3.x"
-    });
-});
 
 // ---------------- START SERVER ----------------
 app.listen(3000, () => {
   console.log("✔ Rajat Sharma Portfolio running at: http://localhost:3000");
-  console.log("✔ GitOps Engine Active: Monitoring Jenkins & ArgoCD");
 });
