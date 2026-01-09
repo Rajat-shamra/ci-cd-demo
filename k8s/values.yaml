@@ -8,3 +8,5 @@ image:
 service:
   type: NodePort
   port: 5000
+  targetPort: 3000 
+  nodePort: 30005
