@@ -15,5 +15,18 @@ spec:
       containers:
         - name: backend
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.service.targetPort }}
+          
+          # 1. Resources yahan add honge
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+          # 2. Liveness Probe yahan add hogi
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+
+          # 3. Readiness Probe yahan add hogi
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
