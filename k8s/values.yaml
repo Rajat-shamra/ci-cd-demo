@@ -3,13 +3,13 @@ replicaCount: 1
 image:
   repository: localhost:32000/ceo-backend
   pullPolicy: IfNotPresent
-  tag: 76
+  tag: "76"
 
 service:
   type: NodePort
-  port: 8080       
-  targetPort: 8080  
-  nodePort: 30005  
+  port: 8080
+  targetPort: 8080
+  nodePort: 30005
 
 resources:
   requests:
@@ -18,18 +18,3 @@ resources:
   limits:
     cpu: "500m"
     memory: "512Mi"
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: 8080     
-  initialDelaySeconds: 60  
-  periodSeconds: 15
-  failureThreshold: 5     
-
-readinessProbe:
-  httpGet:
-    path: /
-    port: 8080
-  initialDelaySeconds: 40  
-  periodSeconds: 15
