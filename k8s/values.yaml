@@ -7,9 +7,9 @@ image:
 
 service:
   type: NodePort
-  port: 5000
-  targetPort: 5000
-  nodePort: 30005
+  port: 8080       
+  targetPort: 8080  
+  nodePort: 30005  
 
 resources:
   requests:
@@ -19,17 +19,17 @@ resources:
     cpu: "500m"
     memory: "512Mi"
 
-
 livenessProbe:
   httpGet:
     path: /
-    port: 5000
-  initialDelaySeconds: 45
-  periodSeconds: 10
+    port: 8080     
+  initialDelaySeconds: 60  
+  periodSeconds: 15
+  failureThreshold: 5     
 
 readinessProbe:
   httpGet:
     path: /
-    port: 5000
-  initialDelaySeconds: 30
-  periodSeconds: 10
+    port: 8080
+  initialDelaySeconds: 40  
+  periodSeconds: 15
