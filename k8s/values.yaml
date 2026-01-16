@@ -3,10 +3,33 @@ replicaCount: 1
 image:
   repository: localhost:32000/ceo-backend
   pullPolicy: IfNotPresent
-  tag: 71
+  tag: "latest"
 
 service:
   type: NodePort
   port: 5000
-  targetPort: 3000 
+  targetPort: 5000
   nodePort: 30005
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 5000
+  initialDelaySeconds: 45
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 5000
+  initialDelaySeconds: 30
+  periodSeconds: 10
