@@ -3,10 +3,22 @@ replicaCount: 1
 image:
   repository: localhost:32000/ceo-backend
   pullPolicy: IfNotPresent
+<<<<<<< HEAD
   tag: 74
+=======
+  tag: 71
+>>>>>>> 6ba1cad (fix: align service port and add resource limits)
 
 service:
   type: NodePort
   port: 5000
-  targetPort: 3000 
+  targetPort: 5000
   nodePort: 30005
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
