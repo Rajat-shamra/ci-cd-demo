@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: ceo-backend
   pullPolicy: Never
-  tag: "v99"
+  tag: "v100"
 
 service:
   type: NodePort
