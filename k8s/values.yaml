@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: ci-cd-demo
   pullPolicy: IfNotPresent
-  tag: "32"
+  tag: "33"
 
 service:
   type: NodePort
